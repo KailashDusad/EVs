@@ -10,29 +10,35 @@
     <div class="container">
         <h1>EV Battery Navigation System</h1>
         <form id="inputForm">
-            <label for="Re">Re (Equivalent Resistance):</label>
-            <input type="number" id="Re" step="any" name="Re" required>
-            
-            <label for="Rct">Rct (Charge Transfer Resistance):</label>
-            <input type="number" id="Rct" name="Rct" step="any" required>
-            
-            <label for="temperature">Temperature (°C):</label>
-            <input type="number" id="temperature" name="temperature" step="any" required>
 
-            <label for="SoC">SoC (%):</label>
-            <input type="number" id="SoC" name="Soc" step="any" required>
-
-            
-            <label for="latitude">latitude:</label>
+            <label for="startLat">Starting Latitude:</label>
+            <input type="number" id="startLat" name="startLat" step="any" required>
+            <label for="startLon">Starting Longitude:</label>
+            <input type="number" id="startLon" name="startLon" step="any" required>
+            <label for="latitude">Destination Latitude:</label>
             <input type="number" id="latitude" name="latitude" step="any" required>
-
-            
-            <label for="longitude">longitude:</label>
+            <label for="longitude">Destination Longitude:</label>
             <input type="number" id="longitude" name="longitude" step="any" required>
+            <!-- A button to get the Re, Rct, Temp and SoC from BMS, in background we will generate them randomly -->
+            <button type="button" id="getBMSData">Get BMS Data</button>
+
+            <!-- now show the generated Re, Rct, Temp and SoC data here, which also get subbmitted when we submit the form -->
+            <div id="bmsData" style="display: none;">
+                <label for="Re">Re:</label>
+                <input type="number" id="Re" name="Re" step="any" readonly>
+                <label for="Rct">Rct:</label>
+                <input type="number" id="Rct" name="Rct" step="any" readonly>
+                <label for="temperature">Temperature:</label>
+                <input type="number" id="temperature" name="temperature" step="any" readonly>
+                <label for="SoC">SoC:</label>
+                <input type="number" id="SoC" name="SoC" step="any" readonly>
+            </div>
+
+
             
             <button type="submit">Run</button>
         </form>
-        
+       
         <div id="results">
             <h2>Results</h2>
             <p id="sohResult"></p>
