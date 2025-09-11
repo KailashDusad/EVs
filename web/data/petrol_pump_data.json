@@ -1,0 +1,270 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.8 e802775f",
+  "osm3s": {
+    "timestamp_osm_base": "2025-09-11T06:52:45Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1234846882,
+  "lat": 23.1053991,
+  "lon": 72.6308627,
+  "tags": {
+    "amenity": "fuel",
+    "ele": "56.12",
+    "source:ele": "gpx"
+  }
+},
+{
+  "type": "node",
+  "id": 1746677973,
+  "lat": 23.0331106,
+  "lon": 72.5139509,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Hindustan Petroleum",
+    "brand:wikidata": "Q1619375",
+    "name": "HP Fuel Station",
+    "official_name": "Hindustan Petroleum",
+    "operator": "HP"
+  }
+},
+{
+  "type": "node",
+  "id": 1781763832,
+  "lat": 23.0045263,
+  "lon": 72.5644882,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Ansh Petrol Pump"
+  }
+},
+{
+  "type": "node",
+  "id": 1952553001,
+  "lat": 23.0684998,
+  "lon": 72.5619985,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Hindustan Petroleum",
+    "name": "Akhbarnagar petrol pump"
+  }
+},
+{
+  "type": "node",
+  "id": 2377178512,
+  "lat": 23.0263196,
+  "lon": 72.5841287,
+  "tags": {
+    "amenity": "fuel"
+  }
+},
+{
+  "type": "node",
+  "id": 3302227672,
+  "lat": 23.0120486,
+  "lon": 72.5638517,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Hindustan Petroleum",
+    "fuel:diesel": "yes",
+    "fuel:octane_80": "yes",
+    "name": "Hindustan Petroleum Station",
+    "operator": "Hindustan Petroleum"
+  }
+},
+{
+  "type": "node",
+  "id": 3306683260,
+  "lat": 23.0049181,
+  "lon": 72.5529832,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Indian Oil"
+  }
+},
+{
+  "type": "node",
+  "id": 3306683612,
+  "lat": 23.0396523,
+  "lon": 72.5955759,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Indian Oil",
+    "brand:wikidata": "Q1289348",
+    "name": "Indian Oil"
+  }
+},
+{
+  "type": "node",
+  "id": 3393656497,
+  "lat": 23.0114450,
+  "lon": 72.5864365,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Adani",
+    "name": "Adani CNG Gas Station",
+    "operator": "Adani"
+  }
+},
+{
+  "type": "node",
+  "id": 4254423389,
+  "lat": 23.0121167,
+  "lon": 72.5124778,
+  "tags": {
+    "addr:postcode": "380015",
+    "addr:street": "100 Ft. Road",
+    "amenity": "fuel",
+    "name": "Shell"
+  }
+},
+{
+  "type": "node",
+  "id": 4326504193,
+  "lat": 23.0135186,
+  "lon": 72.5644029,
+  "tags": {
+    "addr:street": "Ashram Road",
+    "amenity": "fuel",
+    "name": "CNG Adani"
+  }
+},
+{
+  "type": "node",
+  "id": 4358631802,
+  "lat": 23.0579511,
+  "lon": 72.6431616,
+  "tags": {
+    "amenity": "fuel",
+    "fuel:cng": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4358646485,
+  "lat": 23.0523451,
+  "lon": 72.6319464,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Cng Petrol pump"
+  }
+},
+{
+  "type": "node",
+  "id": 4412725295,
+  "lat": 23.0219685,
+  "lon": 72.6508243,
+  "tags": {
+    "addr:street": "Odhav Road",
+    "amenity": "fuel",
+    "name": "Petrol CNG pump"
+  }
+},
+{
+  "type": "node",
+  "id": 4483242065,
+  "lat": 23.0797088,
+  "lon": 72.6678593,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Petrol pump Nava Naroda"
+  }
+},
+{
+  "type": "node",
+  "id": 4483474713,
+  "lat": 23.0400891,
+  "lon": 72.5781297,
+  "tags": {
+    "addr:street": "Kasturba Gandhi Road",
+    "amenity": "fuel",
+    "name": "CNG Bharat petroleum"
+  }
+},
+{
+  "type": "node",
+  "id": 4891804983,
+  "lat": 23.0765370,
+  "lon": 72.5234735,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Bharat Petroleum",
+    "brand:wikidata": "Q854826",
+    "name": "Bharat Petroleum"
+  }
+},
+{
+  "type": "node",
+  "id": 5286955825,
+  "lat": 23.0846729,
+  "lon": 72.6862592,
+  "tags": {
+    "addr:street": "Sardar Patel Ring Road",
+    "amenity": "fuel",
+    "name": "CNG gas station"
+  }
+},
+{
+  "type": "node",
+  "id": 5387295121,
+  "lat": 23.0289447,
+  "lon": 72.6734332,
+  "tags": {
+    "addr:street": "Sardar Patel Ring Road",
+    "amenity": "fuel",
+    "name": "Cng and petrol pump"
+  }
+},
+{
+  "type": "node",
+  "id": 5527662484,
+  "lat": 23.0140063,
+  "lon": 72.5658082,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Bharat Petroleum"
+  }
+},
+{
+  "type": "node",
+  "id": 5753318022,
+  "lat": 23.0292807,
+  "lon": 72.4750283,
+  "tags": {
+    "addr:street": "Ambli Bopal Road",
+    "amenity": "fuel",
+    "brand": "Indian Oil",
+    "brand:wikidata": "Q1289348",
+    "brand:wikipedia": "en:Indian Oil Corporation",
+    "name": "Indian oil CNG n Petrol"
+  }
+},
+{
+  "type": "node",
+  "id": 10177874699,
+  "lat": 22.9871408,
+  "lon": 72.6269447,
+  "tags": {
+    "amenity": "fuel",
+    "name": "Shell"
+  }
+},
+{
+  "type": "node",
+  "id": 12526081066,
+  "lat": 23.0575051,
+  "lon": 72.5562557,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Indian Oil",
+    "brand:wikidata": "Q1289348",
+    "name": "Indian Oil"
+  }
+}
+
+  ]
+}

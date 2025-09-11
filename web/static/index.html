@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Battery Navigation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>EV Battery Navigation System</h1>
+        <form id="inputForm">
+            <label for="Re">Re (Equivalent Resistance):</label>
+            <input type="number" id="Re" step="any" name="Re" required>
+            
+            <label for="Rct">Rct (Charge Transfer Resistance):</label>
+            <input type="number" id="Rct" name="Rct" step="any" required>
+            
+            <label for="temperature">Temperature (°C):</label>
+            <input type="number" id="temperature" name="temperature" step="any" required>
+
+            <label for="SoC">SoC (%):</label>
+            <input type="number" id="SoC" name="Soc" step="any" required>
+
+            
+            <label for="latitude">latitude:</label>
+            <input type="number" id="latitude" name="latitude" step="any" required>
+
+            
+            <label for="longitude">longitude:</label>
+            <input type="number" id="longitude" name="longitude" step="any" required>
+            
+            <button type="submit">Run</button>
+        </form>
+        
+        <div id="results">
+            <h2>Results</h2>
+            <p id="sohResult"></p>
+            <p id="socResult"></p>
+            <p id="rangeResult"></p>
+            <p id="nearestStationResult"></p>
+            <p id="nearestStationCoords"></p>
+            <p id="distToStation"></p>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
