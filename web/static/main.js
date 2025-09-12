@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             resultDiv.innerHTML = `
                 <h3>Estimation Results</h3>
-                <p>State of Health (SoH): ${data.soh}</p>
-                <p>State of Charge (SoC): ${data.soc}</p>
+                <p>State of Health (SoH): ${typeof data.soh === 'number' ? data.soh.toFixed(2) : data.soh}%</p>
+                <p>State of Charge (SoC): ${data.soc}%</p>
                 <p>Estimated Range: ${data.range} km</p>
                 <p>Range Point: ${rangePointStr}</p>
                 <p>Nearest Charging Station: ${data.nearest_station}</p>
