@@ -2,6 +2,10 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+require('dotenv').config();
+
+// const fetch = require('node-fetch');
+
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +16,18 @@ app.use('/data', express.static(path.join(__dirname, 'data')));
 
 const roadData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'road_data.json')));
 const petrolPumpData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'petrol_pump_data.json')));
+
+// async function haversine(lat1, lon1, lat2, lon2) {
+//     const apiKey = process.env.ORS_API_KEY; 
+//     const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${lon1},${lat1}&end=${lon2},${lat2}`;
+//     const response = await fetch(url);
+//     const data = await response.json();
+//     if (data && data.features && data.features[0]) {
+//         // Distance in meters
+//         return data.features[0].properties.summary.distance / 1000; // in km
+//     }
+//     throw new Error('No route found');
+// }
 
 function pointAtDistance(lat1, lon1, lat2, lon2, d) {
     const R = 6371; 
@@ -39,19 +55,23 @@ function pointAtDistance(lat1, lon1, lat2, lon2, d) {
     return { lat: toDeg(φ3), lon: toDeg(λ3) };
 }
 
-app.post('/estimate', (req, res) => {
+app.post('/estimate', async (req, res) => {
     const { Re, Rct, temperature, SoC, latitude,  longitude, startlat, startlon} = req.body;
     const outputFile = path.join(__dirname, 'data', 'matlab_output.json');
     
     const matlabScriptPath = path.join(__dirname, 'train_and_estimate.m').replace(/\\/g, '/');
     const outputFileMatlab = outputFile.replace(/\\/g, '/');
+    // const chargingNeeded = true; 
     const matlabCmd = `matlab -batch "addpath('${path.dirname(matlabScriptPath)}'); train_and_estimate(${Re},${Rct},${temperature},'${outputFileMatlab}'); exit;"`;
-    exec(matlabCmd, (error, stdout, stderr) => {
+    const startTime = Date.now();
+    exec(matlabCmd, async (error, stdout, stderr) => {
+        const endTime = Date.now();
+        const matlabDurationMs = endTime - startTime;
         if (error) {
             console.error('MATLAB error:', stderr);
             return res.status(500).json({ error: 'MATLAB execution failed', details: stderr });
         }
-        fs.readFile(outputFile, 'utf8', (err, data) => {
+        fs.readFile(outputFile, 'utf8', async (err, data) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to read MATLAB output' });
             }
@@ -62,6 +82,34 @@ app.post('/estimate', (req, res) => {
                 return res.status(500).json({ error: 'Invalid MATLAB output' });
             }
             const estimatedRange = calculateRange((result.soh)/100, SoC/100);
+            
+            // 1st we will calculate the disteance between start and destination
+            // and see if the range is sufficient
+            // If not sufficient, then we will do further calculations otherwise we will return that we need not charging this is sufficient
+            // const distStartToDest = haversine(startlat, startlon, latitude, longitude);
+            let distStartToDest = null;
+            try {
+                distStartToDest = await haversine(startlat, startlon, latitude, longitude);
+            } catch (e) {
+                console.error('Error fetching road distance:', e);
+            }
+            if (estimatedRange >= distStartToDest) {
+                return res.status(200).json({
+                    chargingNeeded: false,
+                    soh: result.soh,
+                    soc: SoC,
+                    range: estimatedRange,
+                    range_point: { lat: latitude, lon: longitude },
+                    nearest_station: 'No station needed',
+                    nearest_station_coords: null,
+                    dist_to_station_km: 0,
+                    dist_station_to_range_point_km: 0,
+                    distStartToDest: Math.round(distStartToDest * 100) / 100,
+                    modelAccuracy: result.model_R2 ? (Math.round(result.model_R2 * 10000) / 100) : 'N/A',
+                    matlabExecutionTimeinsec: (matlabDurationMs / 1000).toFixed(2) 
+                });
+            }
+
 
             // Find nearest charging station
             // let nearestStation = 'No station found';
@@ -109,17 +157,22 @@ app.post('/estimate', (req, res) => {
                 typeof startlat === 'number' &&
                 typeof startlon === 'number'
             ) {
-                petrolPumpData.elements.forEach(station => {
+                for (const station of petrolPumpData.elements) {
                     if (station.lat && station.lon) {
-                        const distFromStart = haversine(startlat, startlon, station.lat, station.lon);
-                        if (distFromStart <= estimatedRange) {
+                        let distFromStart = null;
+                        try {
+                            distFromStart = await haversine(startlat, startlon, station.lat, station.lon);
+                        } catch (e) {
+                            console.error('Error fetching road distance:', e);
+                        }
+                        if (distFromStart !== null && distFromStart <= estimatedRange) {
                             candidates.push({
                                 ...station,
                                 distFromStart
                             });
                         }
                     }
-                });
+                }
             }
 
             let nearestStation = 'No station found';
@@ -128,18 +181,24 @@ app.post('/estimate', (req, res) => {
             let distToStationFromStart = null;
 
             if (rangePoint && candidates.length > 0) {
-                candidates.forEach(station => {
-                    const distToRange = haversine(rangePoint.lat, rangePoint.lon, station.lat, station.lon);
-                    if (distToRange < minDistToRangePoint) {
+                for (const station of candidates) {
+                    let distToRange = null;
+                    try {
+                        distToRange = await haversine(rangePoint.lat, rangePoint.lon, station.lat, station.lon);
+                    } catch (e) {
+                        console.error('Error fetching road distance:', e);
+                    }
+                    if (distToRange !== null && distToRange < minDistToRangePoint) {
                         minDistToRangePoint = distToRange;
                         nearestStation = station.tags && station.tags.name ? station.tags.name : 'Unnamed Station';
                         nearestCoords = { lat: station.lat, lon: station.lon };
                         distToStationFromStart = station.distFromStart;
                     }
-                });
+                }
             }
 
             res.status(200).json({
+                chargingNeeded: true,
                 soh: result.soh,
                 soc: SoC,
                 range: estimatedRange,
@@ -147,13 +206,16 @@ app.post('/estimate', (req, res) => {
                 nearest_station: nearestStation,
                 nearest_station_coords: nearestCoords,
                 dist_to_station_km: distToStationFromStart === null ? null : Math.round(distToStationFromStart * 100) / 100,
-                dist_station_to_range_point_km: minDistToRangePoint === Infinity ? null : Math.round(minDistToRangePoint * 100) / 100
+                dist_station_to_range_point_km: minDistToRangePoint === Infinity ? null : Math.round(minDistToRangePoint * 100) / 100,
+                distStartToDest: Math.round(distStartToDest * 100) / 100,
+                modelAccuracy: result.model_R2 ? (Math.round(result.model_R2 * 10000) / 100) : 'N/A',
+                matlabExecutionTimeinsec: (matlabDurationMs / 1000).toFixed(2)
             });
         });
     });
 });
 
-function haversine(lat1, lon1, lat2, lon2) {
+async function haversine(lat1, lon1, lat2, lon2) {
     function toRad(x) { return x * Math.PI / 180; }
     const R = 6371; 
     const dLat = toRad(lat2 - lat1);

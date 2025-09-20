@@ -5,6 +5,14 @@ function fetch_osm_data()
 %     south = 20.10; west = 68.13; north = 24.74; east = 74.46;
     % Ahmedabad bounding box
     south = 22.95; west = 72.45; north = 23.15; east = 72.75;
+    % Jhunjhunu Rajasthan
+%     south = 27.38; west = 75.02; north = 28.61; east = 76.10;
+
+    % Churu & Bikaner Rajasthan
+%     south = 26.8; west  = 72.8; north = 29.0;  east = 75.3;
+
+
+    
 
     road_query = sprintf(['[out:json][timeout:300];' ...
         '(way["highway"](%f,%f,%f,%f); node(w);); out geom;'], ...

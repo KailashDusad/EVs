@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EV Battery Navigation</title>
+    <title>EV Navigation</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="i5.png" type="image/x-icon">
     
 </head>
 <body>
     <div class="container">
-        <h1>EV Battery Navigation System</h1>
+        <h1>EV Navigation System</h1>
         <form id="inputForm" autocomplete="off">
             <label for="startLat">Starting Latitude</label>
             <input type="number" id="startLat" name="startLat" step="any" required>
@@ -19,27 +20,58 @@
             <input type="number" id="latitude" name="latitude" step="any" required>
             <label for="longitude">Destination Longitude</label>
             <input type="number" id="longitude" name="longitude" step="any" required>
+            <button type="button" id="fillTestData">Fill Test Data</button>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const testData = [
+                        {startLat: 22.996439, startLon: 72.480712, latitude: 23.103606, longitude: 72.662733},
+                        {startLat: 23.038086, startLon: 72.484267, latitude: 22.992355, longitude: 72.660209},
+                        {startLat: 23.129072, startLon: 72.526253, latitude: 22.957491, longitude: 72.647241},
+                        {startLat: 22.933720, startLon: 72.553787, latitude: 23.119984, longitude: 72.600535}
+                    ];
+                    const locations = [
+                        {Lat: 22.996439, Lon: 72.480712},
+                        {Lat: 23.103606, Lon: 72.662733},
+                        {Lat: 23.038086, Lon: 72.484267},
+                        {Lat: 22.992355, Lon: 72.660209},
+                        {Lat: 23.129072, Lon: 72.526253},
+                        {Lat: 22.957491, Lon: 72.647241},
+                        {Lat: 22.933720, Lon: 72.553787},
+                        {Lat: 23.119984, Lon: 72.600535}
+                    ]
+                    document.getElementById('fillTestData').addEventListener('click', function() {
+                        const randomIndex = Math.floor(Math.random() * testData.length);
+                        // const startIndex = Math.floor(Math.random() * locations.length);
+                        // let destIndex;
+                        // do {
+                        //     destIndex = Math.floor(Math.random() * locations.length);
+                        // } while (destIndex === startIndex); 
+                        document.getElementById('startLat').value = testData[randomIndex].startLat;
+                        document.getElementById('startLon').value = testData[randomIndex].startLon;
+                        document.getElementById('latitude').value = testData[randomIndex].latitude;
+                        document.getElementById('longitude').value = testData[randomIndex].longitude;
+                    });
+
+                });
+            </script>
             <button type="button" id="getBMSData">Get BMS Data</button>
             <div id="bmsData" style="display: none;">
-                <label for="Re">Re</label>
+                <label for="Re">Re(Ω)</label>
                 <input type="number" id="Re" name="Re" step="any" readonly>
-                <label for="Rct">Rct</label>
+                <label for="Rct">Rct(Ω)</label>
                 <input type="number" id="Rct" name="Rct" step="any" readonly>
-                <label for="temperature">Temperature</label>
+                <label for="temperature">Temperature(°C)</label>
                 <input type="number" id="temperature" name="temperature" step="any" readonly>
-                <label for="SoC">SoC</label>
+                <label for="SoC">SoC(%)</label>
                 <input type="number" id="SoC" name="SoC" step="any" readonly>
             </div>
-            <button type="submit">Run Estimation</button>
+            <button id="estimateB" type="submit" style="display: none;">Run Estimation</button>
         </form>
+        <div id="loadingContainer" style="display: flex; align-items: center; justify-content: right; width: 100%; ">
+            <div id="loading" style="display: none;"></div>
+        </div>
         <div id="results">
             <h2>Results</h2>
-            <p id="sohResult"></p>
-            <p id="socResult"></p>
-            <p id="rangeResult"></p>
-            <p id="nearestStationResult"></p>
-            <p id="nearestStationCoords"></p>
-            <p id="distToStation"></p>
         </div>
     </div>
     <script src="main.js"></script>
