@@ -6,21 +6,66 @@
     <title>EV Navigation</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="i5.png" type="image/x-icon">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
+    <div class="electric-bg">
+        <div class="electric-particle"></div>
+        <div class="electric-particle"></div>
+        <div class="electric-particle"></div>
+        <div class="electric-particle"></div>
+        <div class="electric-particle"></div>
+    </div>
+    
     <div class="container">
-        <h1>EV Navigation System</h1>
+        <div class="header">
+            <div class="header-icon">
+                <i data-feather="zap"></i>
+            </div>
+            <h1>EV Navigation System</h1>
+            <p class="subtitle">Smart range estimation & charging station finder</p>
+        </div>
+        
         <form id="inputForm" autocomplete="off">
-            <label for="startLat">Starting Latitude</label>
-            <input type="number" id="startLat" name="startLat" step="any" required>
-            <label for="startLon">Starting Longitude</label>
-            <input type="number" id="startLon" name="startLon" step="any" required>
-            <label for="latitude">Destination Latitude</label>
-            <input type="number" id="latitude" name="latitude" step="any" required>
-            <label for="longitude">Destination Longitude</label>
-            <input type="number" id="longitude" name="longitude" step="any" required>
-            <button type="button" id="fillTestData">Fill Test Data</button>
+            <div class="input-section">
+                <div class="section-header">
+                    <i data-feather="map-pin"></i>
+                    <span>Starting Location</span>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <label for="startLat">Latitude</label>
+                        <input type="number" id="startLat" name="startLat" step="any" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="startLon">Longitude</label>
+                        <input type="number" id="startLon" name="startLon" step="any" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <div class="section-header">
+                    <i data-feather="target"></i>
+                    <span>Destination</span>
+                </div>
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <label for="latitude">Latitude</label>
+                        <input type="number" id="latitude" name="latitude" step="any" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="longitude">Longitude</label>
+                        <input type="number" id="longitude" name="longitude" step="any" required>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" id="fillTestData" class="secondary-btn">
+                <i data-feather="shuffle"></i>
+                Fill Test Data
+            </button>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const testData = [
@@ -54,26 +99,66 @@
 
                 });
             </script>
-            <button type="button" id="getBMSData">Get BMS Data</button>
-            <div id="bmsData" style="display: none;">
-                <label for="Re">Re(Ω)</label>
-                <input type="number" id="Re" name="Re" step="any" readonly>
-                <label for="Rct">Rct(Ω)</label>
-                <input type="number" id="Rct" name="Rct" step="any" readonly>
-                <label for="temperature">Temperature(°C)</label>
-                <input type="number" id="temperature" name="temperature" step="any" readonly>
-                <label for="SoC">SoC(%)</label>
-                <input type="number" id="SoC" name="SoC" step="any" readonly>
+            <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                <button type="button" id="getBMSData"  style="width: 70%;" class="primary-btn">
+                    <i data-feather="battery"></i>
+                    Get BMS Data
+                </button>
             </div>
-            <button id="estimateB" type="submit" style="display: none;">Run Estimation</button>
+            
+
+            <div id="bmsData" style="display: none;">
+                <div class="section-header bms-header">
+                    <i data-feather="activity"></i>
+                    <span>BMS Data</span>
+                </div>
+                
+                <div class="bms-grid">
+                    <div class="input-wrapper">
+                        <label for="Re">Re (Ω)</label>
+                        <input type="number" id="Re" name="Re" step="any" readonly>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="Rct">Rct (Ω)</label>
+                        <input type="number" id="Rct" name="Rct" step="any" readonly>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="temperature">Temperature (°C)</label>
+                        <input type="number" id="temperature" name="temperature" step="any" readonly>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="SoC">SoC (%)</label>
+                        <input type="number" id="SoC" name="SoC" step="any" readonly>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                <button id="estimateB" type="submit" style="display: none; width: 70%;" class="estimate-btn"  >
+                    <i data-feather="play"></i>
+                    Run Estimation
+                </button>
+            </div>
         </form>
-        <div id="loadingContainer" style="display: flex; align-items: center; justify-content: right; width: 100%; ">
-            <div id="loading" style="display: none;"></div>
+
+        <div id="loadingContainer">
+            <div id="loading"></div>
         </div>
+
         <div id="results">
-            <h2>Results</h2>
+            <div class="results-header">
+                <i data-feather="bar-chart-2"></i>
+                <h2>Results</h2>
+            </div>
+            <div class="results-placeholder">
+                <i data-feather="info"></i>
+                <p>Results will appear here after running estimation</p>
+            </div>
         </div>
     </div>
+
     <script src="main.js"></script>
+    <script>
+        feather.replace();
+    </script>
 </body>
 </html>

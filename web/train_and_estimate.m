@@ -38,11 +38,12 @@ function train_and_estimate(Re, Rct, temperature, outputFile)
         R2_ensemble = 1 - sum((y_soh - y_pred_ensemble).^2) / sum((y_soh - mean(y_soh)).^2);
         RMSE_ensemble = sqrt(mean((y_soh - y_pred_ensemble).^2));
 
-        % TFLN (Trigonometric basis in fitrnet)
-        X_tfln = [X, sin(pi.*X), cos(pi.*X), sin(2*pi.*X), cos(2*pi.*X)];
+        % TFLN
+        X_tfln = [X, sin((pi/4).*X), cos((pi/4).*X), sin(2*(pi/4).*X), cos(2*(pi/4).*X), sin(3*(pi/4).*X), cos(3*(pi/4).*X), sin(4*(pi/4).*X), cos(4*(pi/4).*X), sin(5*(pi/4).*X), cos(5*(pi/4).*X), sin(6*(pi/4).*X), cos(6*(pi/4).*X), sin(7*(pi/4).*X), cos(7*(pi/4).*X), sin(8*(pi/4).*X), cos(8*(pi/4).*X)];
         
         % mdl_tfln = fitrnet(X_tfln, y_soh, 'Standardize', true);
-        mdl_tfln = fitrensemble(X_tfln, y_soh, 'Method', 'Bag'); % Works good
+        % mdl_tfln = fitrensemble(X_tfln, y_soh, 'Method', 'Bag'); % Works good
+        mdl_tfln = fitrensemble(X_tfln, y_soh, 'OptimizeHyperparameters', 'all', 'HyperparameterOptimizationOptions', struct('AcquisitionFunctionName','expected-improvement-plus')); % Works best till now, but takes time to train
         cvmdl_tfln = crossval(mdl_tfln);
         y_pred_tfln = kfoldPredict(cvmdl_tfln);
         R2_tfln = 1 - sum((y_soh - y_pred_tfln).^2) / sum((y_soh - mean(y_soh)).^2)
@@ -79,7 +80,7 @@ function train_and_estimate(Re, Rct, temperature, outputFile)
     X_new = [Re, Rct, temperature];
     % soh = predict(mdl, X_new);
     if strcmp(modelType, 'TFLN')
-        X_new_tfln = [X_new, sin(pi.*X_new), cos(pi.*X_new), sin(2*pi.*X_new), cos(2*pi.*X_new)];
+        X_new_tfln = [X_new, sin((pi/4).*X_new), cos((pi/4).*X_new), sin(2*(pi/4).*X_new), cos(2*(pi/4).*X_new), sin(3*(pi/4).*X_new), cos(3*(pi/4).*X_new), sin(4*(pi/4).*X_new), cos(4*(pi/4).*X_new), sin(5*(pi/4).*X_new), cos(5*(pi/4).*X_new), sin(6*(pi/4).*X_new), cos(6*(pi/4).*X_new), sin(7*(pi/4).*X_new), cos(7*(pi/4).*X_new), sin(8*(pi/4).*X_new), cos(8*(pi/4).*X_new)];
         soh = predict(mdl, X_new_tfln);
         % FEB=[];
         % for k=1:fln_order

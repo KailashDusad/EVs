@@ -17,17 +17,16 @@ app.use('/data', express.static(path.join(__dirname, 'data')));
 const roadData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'road_data.json')));
 const petrolPumpData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'petrol_pump_data.json')));
 
-// async function haversine(lat1, lon1, lat2, lon2) {
-//     const apiKey = process.env.ORS_API_KEY; 
-//     const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${lon1},${lat1}&end=${lon2},${lat2}`;
-//     const response = await fetch(url);
-//     const data = await response.json();
-//     if (data && data.features && data.features[0]) {
-//         // Distance in meters
-//         return data.features[0].properties.summary.distance / 1000; // in km
-//     }
-//     throw new Error('No route found');
-// }
+async function haversine(lat1, lon1, lat2, lon2) {
+    const apiKey = process.env.ORS_API_KEY; 
+    const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${lon1},${lat1}&end=${lon2},${lat2}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data && data.features && data.features[0]) {
+        return data.features[0].properties.summary.distance / 1000; 
+    }
+    throw new Error('No route found');
+}
 
 function pointAtDistance(lat1, lon1, lat2, lon2, d) {
     const R = 6371; 
@@ -215,18 +214,18 @@ app.post('/estimate', async (req, res) => {
     });
 });
 
-async function haversine(lat1, lon1, lat2, lon2) {
-    function toRad(x) { return x * Math.PI / 180; }
-    const R = 6371; 
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-}
+// async function haversine(lat1, lon1, lat2, lon2) {
+//     function toRad(x) { return x * Math.PI / 180; }
+//     const R = 6371; 
+//     const dLat = toRad(lat2 - lat1);
+//     const dLon = toRad(lon2 - lon1);
+//     const a =
+//         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//         Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+//         Math.sin(dLon / 2) * Math.sin(dLon / 2);
+//     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//     return R * c;
+// }
 
 function calculateRange(SoH, SoC) {
     const C_nom_Ah = 75;          // Nominal capacity in Ah (≈26 kWh pack)
