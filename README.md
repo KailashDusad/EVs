@@ -129,8 +129,3 @@ README.md
 - Battery datasets from NASA Prognostics Center
 - OpenRouteService & OpenStreetMap APIs
 
----
-
-## Contact
-
-For questions or collaboration, open an issue or contact [your.email@example.com](mailto:your.email@example.com).
